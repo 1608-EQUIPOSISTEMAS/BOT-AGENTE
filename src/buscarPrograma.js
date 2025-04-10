@@ -40,13 +40,13 @@ const buscarProximosProgramas = async (mensaje) => {
             `👨‍🏫 *Docentes:* ${programa["Docente"]}\n\n`;
 
         if (programa.IMAGEN) {
-            let imagenPath = `./media/${programa.IMAGEN}`;
+            let imagenPath = `./src/media/${programa.IMAGEN}`;
             if (fs.existsSync(imagenPath)) {
                 imagen = imagenPath;
             }
         }
         if (programa.PDF && programa.CATEGORIA) {
-            let pdfPath = `./media/pdfs/${programa.CATEGORIA}/${programa.PDF}`;
+            let pdfPath = `./src/media/pdfs/${programa.CATEGORIA}/${programa.PDF}`;
             if (fs.existsSync(pdfPath)) {
                 pdf = pdfPath;
             }
