@@ -16,7 +16,12 @@ const { setRecordatorioInactividad } = require('../utils/sessionManager');
 
 
 const client = new Client({
-  authStrategy: new LocalAuth()
+  authStrategy: new LocalAuth({
+    dataPath: './session' // usa esta carpeta para guardar la sesión
+  }),
+  puppeteer: {
+    args: ['--no-sandbox']
+  }
 });
 
 client.on('qr', (qr) => {
@@ -25,7 +30,7 @@ client.on('qr', (qr) => {
 });
 
 client.on('ready', () => {
-  console.log('✅ Bot de WhatsApp listo.');
+  console.log('✅ Cliente listo y conectado a WhatsApp');
 });
 
 client.on('message', async (message) => {

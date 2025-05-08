@@ -6,6 +6,7 @@ services:
       - ./src:/app/src
       - ./media:/app/media
       - ./index.js:/app/index.js
+      - ./session:/app/session  # <--- Guarda la sesión aquí
     environment:
       - NODE_ENV=production
     ports:
