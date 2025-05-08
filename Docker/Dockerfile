@@ -13,7 +13,7 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 # Copiar los archivos del proyecto al contenedor
-COPY package.json ./
+COPY package.json package-lock.json ./
 
 # Instalar las dependencias
 RUN npm install
@@ -21,6 +21,8 @@ RUN npm install
 # Copiar el resto del proyecto
 COPY . .
 
+# Ajustes para Puppeteer en Alpine
+ENV PUPPETEER_SKIP_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Establecer permisos para que se pueda escribir y leer en la ruta /app
