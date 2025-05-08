@@ -1,3 +1,1 @@
-const app = require('./src/app');
-
-app.client.initialize();
+const client = require('./src/bot/app');  // Importar directamente el cliente

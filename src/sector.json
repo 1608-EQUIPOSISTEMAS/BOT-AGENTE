@@ -1,0 +1,75 @@
+{
+    "DATOS": {
+      "Ciencia de Datos": {
+        "PRACTICANTE": ["Excel Intermedio", "Data Analytics", "Python", "SQL Server"],
+        "ASISTENTE": ["Excel Avanzado", "SQL Server Avanzado", "Python Avanzado: Machine Learning"],
+        "ANALISTA": ["IA & Deep Learning (TensorFlow y PyTorch)", "Conocimiento de Big Data"],
+        "COORDINADOR": ["Gestión Ágil de Proyectos", "SCRUM"]
+      },
+      "Análisis de Datos": {
+        "PRACTICANTE": ["Excel Intermedio", "Power BI", "SQL Server"],
+        "ASISTENTE": ["Excel Avanzado", "SQL Server Avanzado", "VBA Macros", "Python"],
+        "ANALISTA": ["Python Avanzado: Machine Learning", "Data Analytics"],
+        "COORDINADOR": ["Gestión Ágil de Proyectos", "SCRUM", "Conocimiento de Big Data"]
+      },
+      "Business Intelligence": {
+        "PRACTICANTE": ["Excel Intermedio", "Power BI", "SQL Server", "Tableu", "Looker Studio"],
+        "ASISTENTE": ["Excel Avanzado", "Power BI Avanzado ( Herramienta ETL)", "SQL Server Avanzado"],
+        "ANALISTA": ["VBA Macros", "Data Storytelling", "Alteryx ( ETL )"],
+        "COORDINADOR": ["Gestión Ágil de Proyectos", "SCRUM"]
+      }
+    },
+    "PROCESOS Y MEJORA CONTINUA": {
+      "Gestión de Procesos": {
+        "PRACTICANTE": ["Excel Intermedio", "Gestión de Procesos", "Bizagi Modeler", "Visio", "Gestión estratégica con OKRS y KPIS"],
+        "ASISTENTE": ["Excel Avanzado", "KPIS y OKRS", "Lean Six Sigma", "SQL Server", "Power Automate"],
+        "ANALISTA": ["Power BI", "SQL Server Avanzado", "Power Apps & Automate", "ISO 9001:2015 Gestión de la Calidad", "Gestión de Proyectos I"],
+        "COORDINADOR": ["Gestión de Proyectos II", "Robotización de Procesos con Uipath", "Power App & Automate Avanzado"]
+      },
+      "Gestión de la Mejora Continua": {
+        "PRACTICANTE": ["Excel Intermedio", "Gestión de Procesos", "ISO 9001:2015 Norma e implementación", "Gestión estratégica con OKRS y KPIS"],
+        "ASISTENTE": ["Excel Avanzado", "Lean Six Sigma", "KPIS y OKRS", "Power BI: Aplicativo", "Looker Studio"],
+        "ANALISTA": ["Gestión de Proyectos I", "SQL Server"],
+        "COORDINADOR": ["Gestión de Proyectos II", "SQL Server Avanzado"]
+      },
+      "Gestión de la Calidad": {
+        "PRACTICANTE": ["Excel Intermedio", "Gestión de Procesos", "ISO 9001: 2015 Gestión de la calidad", "ISO 9001:2015 Norma e implementación"],
+        "ASISTENTE": ["Excel Avanzado", "KPIS Y OKRS", "ISO 14001: Gestión ambiental", "ISO 45001: Gestión de seguridad & salud en el trabajo"],
+        "ANALISTA": ["Gestión de Proyectos I", "Sistema Integrado de Gestión", "Power BI", "Looker Studio", "Tableau"],
+        "COORDINADOR": ["Gestión de Proyectos II", "Auditoría Interna QHSE"]
+      },
+      "Gestión de Transformación & Automatización de Procesos": {
+        "PRACTICANTE": ["Excel Intermedio", "Gestión de Procesos", "Bizagi Modeler"],
+        "ASISTENTE": ["Excel Avanzado", "VBA Macros", "Power Automate"],
+        "ANALISTA": ["Power Apps & Automate", "Python: Análisis de datos", "Gestión de proyectos I"],
+        "COORDINADOR": ["Gestión de proyectos II", "Robotización de Procesos con Uipath", "Power Apps & Automate Avanzado", "Data Analytics"]
+      }
+    },
+    "LOGÍSTICA": {
+      "Gestión de la Cadena de Suministro": {
+        "PRACTICANTE": ["Excel Intermedio", "SAP HANA IN", "Planeamiento y pronóstico de la demanda", "Gestión de procesos", "Lean Supply Chain", "Introducción y principios Lean"],
+        "ASISTENTE": ["Excel Avanzado", "SAP HANA MM", "Power BI", "Implementación Lean y Mejora Continua", "Python", "Looker Studio"],
+        "ANALISTA": ["Supply Chain Ananlytics", "KPIS Logísticos con Power BI", "Gerencia de centros de distribución y almacenes", "Gestión de Transportes y canales de distribución", "Gestión de Proyectos I"],
+        "COORDINADOR": ["Lean Logistics", "Gestión de compras y proveedores", "Gestión de Proyectos II", "Habilidades gerenciales Logísticas"]
+      },
+      "Gestión de Inventarios": {
+        "PRACTICANTE": ["Excel Intermedio", "SAP HANA IN", "Gestión de procesos", "Gestión de compras e inventarios", "Introducción de principios Lean"],
+        "ASISTENTE": ["Excel Avanzado", "SAP HANA MM", "Gestión de centro de distribución y almacenes", "Plan y pronóstico de la demanda", "Implentación Lean y Mejora continua"],
+        "ANALISTA": ["SAP HANA EWM", "Gestión de compras y proveedores", "Power BI", "Gestión de Proyectos I", "Lean Supply Chain"],
+        "COORDINADOR": ["KPISs Logísticos con Power BI", "Gestión de Proyectos II", "Habilidades gerenciales Logísticas"]
+      },
+      "Gestión de Transporte y Distribución": {
+        "PRACTICANTE": ["Excel Intermedio", "SAP HANA IN", "Gestión de procesos", "Introducción de principios Lean", "Gestión de compras e inventarios"],
+        "ASISTENTE": ["Excel Avanzado", "Gestión de Distribución y Almacenes", "Implentación Lean y Mejora continua"],
+        "ANALISTA": ["SAP HANA SD", "Gestión de Compras y Proveedores", "Gestión de transportes", "Gestión de Proyectos I", "Lean Supply Chain"],
+        "COORDINADOR": ["Gestión de Proyectos II"]
+      },
+      "Gestión de Almacenes": {
+        "PRACTICANTE": ["Excel Intermedio", "SAP HANA IN", "Gestión de procesos", "Planeamiento y pronóstico de la demanda", "Introducción de principios Lean"],
+        "ASISTENTE": ["Excel Avanzado", "SAP HANA MM", "Gestión de centros de Distribución y almacenes", "Gestión de compras y proveedores", "Python: Análisis de datos", "Gestión de compras e inventarios", "Python", "Implentación Lean y Mejora continua"],
+        "ANALISTA": ["Supply Chain Analytics", "SAP HANA EWM", "Gestión de Proyectos I", "Lean Supply Chain"],
+        "COORDINADOR": ["Lean Logístics", "Gestión de Proyectos II"]
+      }
+    }
+  }
+  
