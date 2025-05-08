@@ -16,7 +16,8 @@ async function manejarConsultasGenerales(client, numero, mensaje) {
   }
 
   if (lowerText.includes('ases')|| lowerText.includes('ayuda')|| lowerText.includes('personal'))  {
-    await client.sendMessage(numero, 'En estos momentos nos encontramos fuera de Horario Laboral, pero el día de mañana, uno de nuestros asesores especializados te ayudarán a solventar todas las dudas que tengas y ayudarte en tu proceso de inscripción.');
+    await client.sendMessage(numero, 'En estos momentos nos encontramos fuera de horario laboral. 📅 Mañana, una de nuestras asesoras especializadas 🤝 se pondrá en contacto contigo para ayudarte con todas tus dudas ❓ y apoyarte en tu proceso de inscripción 📝. 🙏 ¡Gracias por tu interés!'
+);
     return true;
   }
 

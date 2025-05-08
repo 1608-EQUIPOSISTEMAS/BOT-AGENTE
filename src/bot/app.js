@@ -12,15 +12,16 @@ const { responderSiPreguntaDetalle } = require('../services/responderDetalles');
 const { yaSaludo, marcarSaludoEnviado } = require('../utils/sessionManager');
 const { obtenerSaludoPersonalizado } = require('../utils/saludo');
 const { setRecordatorioInactividad } = require('../utils/sessionManager');
-
-
+const puppeteer = require('puppeteer');
 
 const client = new Client({
   authStrategy: new LocalAuth({
     dataPath: './session' // usa esta carpeta para guardar la sesión
   }),
   puppeteer: {
-    args: ['--no-sandbox']
+    executablePath: puppeteer.executablePath(), // ✅ Esto indica exactamente qué Chrome usar
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: true // Opcional: más limpio si no necesitas ver el navegador
   }
 });
 
@@ -44,7 +45,6 @@ client.on('message', async (message) => {
 
     const respondidoPorDetalle = await responderSiPreguntaDetalle(message);
     if (respondidoPorDetalle) return;
-
 
     // 👇 Aquí va el flujo de pago
     const handledPago = await responderCompra(client, message, texto);
@@ -80,7 +80,11 @@ client.on('message', async (message) => {
       // Si no se menciona un programa, respondemos con los sectores
       console.log('❌ No se identificó ningún programa. Ofreciendo sectores...');
       // Cambiar aquí: Pasamos el texto y el cliente para enviar el mensaje
-      const respuestaSector = await responderSector(texto, client, numero);
+      //const respuestaSector = await responderSector(texto, client, numero);
+      await client.sendMessage(
+  numero,
+  'En estos momentos nos encontramos fuera de horario laboral. 📅 Mañana, una de nuestras asesoras especializadas 🤝 se pondrá en contacto contigo para ayudarte con todas tus dudas ❓ y apoyarte en tu proceso de inscripción 📝. 🙏 ¡Gracias por tu interés!'
+);
 
     }
     //Fin busqueda de programa

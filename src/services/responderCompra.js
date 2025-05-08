@@ -58,12 +58,14 @@ Escribe el número o la opción. Para salir, escribe "salir".
             } else if (body === '4' || body.includes('token') || body.includes('tarjeta')) {
                 console.log(`📝 Enviando pago por Tarjeta`);
                 await message.reply(`¡Muchas gracias por todos los datos brindados!
-En estos momentos nos encontramos fuera de Horario Laboral, pero el día de mañana, uno de nuestros asesores especializados te ayudarán a solventar todas las dudas que tengas y ayudarte en tu proceso de inscripción.`);
+'En estos momentos nos encontramos fuera de horario laboral. 📅 Mañana, una de nuestras asesoras especializadas 🤝 se pondrá en contacto contigo para ayudarte con todas tus dudas ❓ y apoyarte en tu proceso de inscripción 📝. 🙏 ¡Gracias por tu interés!'
+`);
                 return true;
             } else if (body === '5' || body.includes('asesor') || body.includes('ayuda') || body.includes('personalizada')) {
                 console.log(`📝 Enviando asesoría personalizada`);
                 await message.reply(`¡Muchas gracias por todos los datos brindados!
-En estos momentos nos encontramos fuera de Horario Laboral, pero el día de mañana, uno de nuestros asesores especializados te ayudarán a solventar todas las dudas que tengas y ayudarte en tu proceso de inscripción.`);
+'En estos momentos nos encontramos fuera de horario laboral. 📅 Mañana, una de nuestras asesoras especializadas 🤝 se pondrá en contacto contigo para ayudarte con todas tus dudas ❓ y apoyarte en tu proceso de inscripción 📝. 🙏 ¡Gracias por tu interés!'
+`);
                 return true;
             }
 
