@@ -9,7 +9,6 @@ RUN apk add --no-cache \
     ca-certificates \
     ttf-freefont
 
-
 # Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
@@ -18,6 +17,9 @@ COPY package.json ./
 
 # Instalar las dependencias
 RUN npm install
+
+# Copiar el resto del proyecto
+COPY . .
 
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
