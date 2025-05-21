@@ -13,7 +13,6 @@ async function responderSiPreguntaDetalle(message) {
   const cursoMes = ultimo['CURSO MES']?.toUpperCase() === 'SI';
   const precioFinal = cursoMes ? 'S/.250 (válido por ser *CURSO DEL MES*)' : (ultimo.PRECIO || 'Aún no se cuenta.');
 
-
   if (texto.includes('precio') || texto.includes('monto') || texto.includes('inversión')) {
     respuesta = `💰 *Inversión de ${ultimo.PROGRAMA}*: ${precioFinal}`;
   } else if (texto.includes('sesiones') || texto.includes('sesion')|| texto.includes('clase')   ) {

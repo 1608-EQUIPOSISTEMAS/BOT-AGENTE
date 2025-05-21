@@ -10,7 +10,7 @@ async function responderProgramaIdentificado(message, programa) {
 
 
   // 1. Mensaje principal
-  await message.reply(`Claro. Aquí tienes la información de *${programa}*`);
+  await message.reply(`Hola, soy WEAGENT, te brindaré la información de *${programa}*`);
 
   if (!detalles) return;
 
@@ -45,12 +45,12 @@ async function responderProgramaIdentificado(message, programa) {
     // Mostrar en consola cuál es el PDF que se está buscando
     console.log('📄 Buscando PDF en:', rutaPDF);
     if (fs.existsSync(rutaPDF)) {
-        console.log('✅ PDF encontrado, enviando:', rutaPDF);
-        const media = MessageMedia.fromFilePath(rutaPDF);
-        await message.reply(media, message.from, {
-          sendMediaAsDocument: true,
-          caption: '📘 Brochure informativo',
-        });
+      console.log('✅ PDF encontrado, enviando:', rutaPDF);
+      const media = MessageMedia.fromFilePath(rutaPDF);
+      await message.reply(media, message.from, {
+        sendMediaAsDocument: true,
+        caption: '📘 Brochure informativo',
+      });
     } else {
       console.warn(`❌ No se encontró el archivo PDF en: ${rutaPDF}`);
     }

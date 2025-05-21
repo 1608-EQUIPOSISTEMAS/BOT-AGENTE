@@ -1,28 +1,21 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const puppeteer = require('puppeteer');
 const { obtenerFechaHora } = require('../utils/datetime');
 const { guardarMensajeEnExcel } = require('../services/excelService');
 const { identificarPrograma } = require('../utils/programaIdentifier');
 const { responderProgramaIdentificado } = require('../services/responderPrograma');
 const { enviarHorarios } = require('../services/enviarHorarios');
-const { responderCompra } = require('../services/responderCompra');
-const { responderSector } = require('../services/responderSector');
-const { manejarConsultasGenerales } = require('../services/responderGenerales');
-const { responderSiPreguntaDetalle } = require('../services/responderDetalles');
-const { yaSaludo, marcarSaludoEnviado } = require('../utils/sessionManager');
-const { obtenerSaludoPersonalizado } = require('../utils/saludo');
-const { setRecordatorioInactividad } = require('../utils/sessionManager');
-const puppeteer = require('puppeteer');
+
+const sesiones = {}; // Sesiones activas por número
 
 const client = new Client({
-  authStrategy: new LocalAuth({
-    dataPath: './session' // usa esta carpeta para guardar la sesión
-  }),
+  authStrategy: new LocalAuth({ dataPath: './session' }),
   puppeteer: {
-    executablePath: puppeteer.executablePath(), // ✅ Esto indica exactamente qué Chrome usar
+    executablePath: puppeteer.executablePath(),
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    headless: true // Opcional: más limpio si no necesitas ver el navegador
-  }
+    headless: true,
+  },
 });
 
 client.on('qr', (qr) => {
@@ -40,60 +33,124 @@ client.on('message', async (message) => {
     if (message.type !== 'chat') return;
 
     const texto = (message.body || '').trim();
-    const mensaje=message.body
-    console.log(`📩 Mensaje de ${message.from}: ${texto}`);
-
-    const respondidoPorDetalle = await responderSiPreguntaDetalle(message);
-    if (respondidoPorDetalle) return;
-
-    // 👇 Aquí va el flujo de pago
-    const handledPago = await responderCompra(client, message, texto);
-    console.log('👉 handledPago:', handledPago);
-    if (handledPago) return;
-
-    // 👇 3. Consultas generales como "flexibilidad", "certificado", "intranet"
-    const atendido = await manejarConsultasGenerales(client, message.from, mensaje);
-    if (atendido) return;
-
-    const { fecha, hora } = obtenerFechaHora();
+    const mensaje = texto.toLowerCase();
     const numero = message.from;
     const nombre = message._data?.notifyName || 'Sin nombre';
+    const { fecha, hora } = obtenerFechaHora();
 
-    // 👋 Saludo personalizado solo una vez por usuario
-    if (!yaSaludo(numero)) {
-      const saludo = obtenerSaludoPersonalizado();
-      await client.sendMessage(numero, saludo);
-      marcarSaludoEnviado(numero);
+    console.log(`📩 Mensaje de ${numero}: ${texto}`);
+
+    if (!sesiones[numero]) sesiones[numero] = {};
+    const estado = sesiones[numero].estado || null;
+
+    // ✅ MENÚ GLOBAL (se evalúa antes que cualquier estado)
+    if (texto === '1' || texto === '2' || texto === '3') {
+      sesiones[numero] = {}; // Reinicia la sesión por si hay estados previos
+
+      if (texto === '1'|| texto === 'aseso') {
+        await client.sendMessage(numero, '📝 Te pondremos en contacto con un asesor personalizado. 😊');
+        return;
+      }
+
+      if (texto === '3' || texto === 'pago') {
+        sesiones[numero].estado = 'esperando_perfil_pago';
+        await client.sendMessage(numero,
+          'Genial! 💳 Estás en proceso de pago. Porfa antes coméntame tu perfil. ¿Eres estudiante o profesional?\n\n' +
+          '📌 *Para estudiante*: deberá adjuntar foto de su carnet universitario o ficha de matrícula/intranet.\n\n' +
+          'Sabiendo eso, coméntame: ¿qué perfil tienes?');
+        return;
+      }
+
+      if (texto === '2' || texto === 'llamada') {
+        await client.sendMessage(numero, '📞 Te llamaremos para resolver tus dudas. ¡Gracias!');
+        return;
+      }
     }
-    setRecordatorioInactividad(numero, async () => {
-      await client.sendMessage(numero, '¿Necesitas ayuda con algo más? Si deseas, puedo ponerte en contacto con una asesora. 😊');
-    });
 
-    //Busqueda de programa
-    const programa = identificarPrograma(texto);
-    if (programa) {
-      console.log(`🎯 Programa identificado: ${programa}`);
-      await responderProgramaIdentificado(message, programa);
-      // Enviar horarios del programa
-      enviarHorarios(client, numero, programa);
-    } else {
-      // Si no se menciona un programa, respondemos con los sectores
-      console.log('❌ No se identificó ningún programa. Ofreciendo sectores...');
-      // Cambiar aquí: Pasamos el texto y el cliente para enviar el mensaje
-      //const respuestaSector = await responderSector(texto, client, numero);
-      await client.sendMessage(
-  numero,
-  'En estos momentos nos encontramos fuera de horario laboral. 📅 Mañana, una de nuestras asesoras especializadas 🤝 se pondrá en contacto contigo para ayudarte con todas tus dudas ❓ y apoyarte en tu proceso de inscripción 📝. 🙏 ¡Gracias por tu interés!'
-);
+    // FLUJO 3: Mensaje desde la web o redes sociales
+    const fuentesValidas = ['hola estoy en', 'hola, estoy en'];
+    const plataformasValidas = ['web', 'facebook', 'linkedin', 'instagram'];
+    const iniciaCorrectamente = fuentesValidas.some(f => mensaje.startsWith(f));
+    const contienePlataforma = plataformasValidas.some(p => mensaje.includes(p));
 
+    if (iniciaCorrectamente && contienePlataforma) {
+      const programa = identificarPrograma(texto); 
+      if (programa) {
+        console.log(`🎯 Programa identificado: ${programa}`);
+        await responderProgramaIdentificado(message, programa);
+        enviarHorarios(client, numero, programa);
+      } else {
+        await client.sendMessage(numero);
+      }
+      return;
     }
-    //Fin busqueda de programa
 
+    // FLUJO: Selección de perfil
+    if (estado === 'esperando_perfil_pago' || mensaje.includes('estudiante') || mensaje.includes('profesional')) {
+      if (mensaje.includes('estudiante')) {
+        sesiones[numero].perfil = 'estudiante';
+        sesiones[numero].estado = 'perfil_seleccionado';
+        await client.sendMessage(numero, '✅ Gracias por la info. Una asesora se pondrá en contacto contigo para validar tu condición de estudiante. 🎓\n\nSi deseas cambiar tu perfil, simplemente escribe *profesional*.');
+        return;
+      } else if (mensaje.includes('profesional')) {
+        sesiones[numero].perfil = 'profesional';
+        sesiones[numero].estado = 'esperando_metodo_pago';
+        await client.sendMessage(numero,
+          'Perfecto 💼 Aquí tienes las opciones de pago disponibles:\n\n' +
+          '1. Pago por Yape\n' +
+          '2. Pago por Transferencia\n' +
+          '3. Pago en Campus\n' +
+          '4. Pago por Tarjeta de crédito\n' +
+          '5. Asesoría Personalizada\n\n' +
+          'Puedes cambiar tu perfil escribiendo *estudiante*. 👈');
+        return;
+      } else {
+        await client.sendMessage(numero, 'Por favor indícame si eres *estudiante* o *profesional* para continuar. 🙌');
+        sesiones[numero].estado = 'esperando_perfil_pago';
+        return;
+      }
+    }
+
+    // FLUJO: Selección de método de pago
+    if (estado === 'esperando_metodo_pago' || estado === 'perfil_seleccionado') {
+      if (mensaje === '1' || mensaje.includes('yape')) {
+        await message.reply('Perfecto ✨\nTe envío el número de Yape y Código QR 👇\n📲 999 606 366 // WE Educación Ejecutiva');
+        const qr = MessageMedia.fromFilePath('./media/pago/yape.jpg');
+        await client.sendMessage(numero, qr);
+        sesiones[numero].estado = 'esperando_metodo_pago';
+        return;
+      } else if (mensaje === '2' || mensaje.includes('transferencia') || mensaje.includes('banco')) {
+        await message.reply('💳 Puedes realizar el pago mediante transferencia entre estas bancas:');
+        const tran = MessageMedia.fromFilePath('./media/pago/transferencia.jpg');
+        await client.sendMessage(numero, tran);
+        sesiones[numero].estado = 'esperando_metodo_pago';
+        return;
+      } else if (mensaje === '3' || mensaje.includes('campus')) {
+        await message.reply('💳 Puedes realizar el pago en línea aquí:\nhttps://www.youtube.com/watch?v=NcYRBhhMadk');
+        sesiones[numero].estado = 'esperando_metodo_pago';
+        return;
+      } else if (mensaje === '4' || mensaje.includes('tarjeta') || mensaje.includes('token')) {
+        await message.reply('¡Muchas gracias por todos los datos brindados!\nEn estos momentos nos encontramos fuera de horario laboral. 📅 Una asesora se pondrá en contacto contigo mañana. 🙏');
+        sesiones[numero].estado = 'esperando_metodo_pago';
+        return;
+      } else if (mensaje === '5' || mensaje.includes('asesor') || mensaje.includes('ayuda')) {
+        await message.reply('¡Gracias por tu interés!\nUna asesora se pondrá en contacto contigo mañana. 🙏');
+        delete sesiones[numero];
+        return;
+      } else {
+        await client.sendMessage(numero, 'Por favor responde con el número o palabra del método de pago que deseas usar. 🙏');
+        return;
+      }
+    }
+
+    // FLUJO POR DEFECTO: guardar el mensaje
     await guardarMensajeEnExcel(fecha, hora, numero, nombre, texto);
 
   } catch (error) {
     console.error('❌ Error al procesar el mensaje:', error);
   }
 });
+
+
 
 client.initialize();
