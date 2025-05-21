@@ -67,7 +67,6 @@ function enviarHorarios(client, numero, programaNombre) {
 Participa del Sorteo de Un Kit de Accesorios de Invierno por *Winter Days*
 1 Termo Stanley, 1 sobre de Cafe para pasar Starbucks y una Taza WE ☕ 🌧️
 🗓️ Fecha del sorteo: 👉🏼 Viernes 30 de Mayo - 12:00 p.m.`;
-
               client.sendMessage(numero, benefi)
                 .then(() => {
                   console.log('✅ Beneficios enviados.');
